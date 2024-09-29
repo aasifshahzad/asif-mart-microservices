@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+// Enum for NotificationType
+enum NotificationType {
+    TRANSACTIONAL = 0;
+    PROMOTIONAL = 1;
+    INFORMATIONAL = 2;
+    USER_INTERACTION = 3;
+    SECURITY = 4;
+    EVENT_BASED = 5;
+    FEEDBACK_SURVEY = 6;
+}
+
+// Enum for Event
+enum Event {
+    ORDER_CONFIRMATION = 0;
+    PAYMENT_CONFIRMATION = 1;
+    SHIPPING_NOTIFICATION = 2;
+    DELIVERY_CONFIRMATION = 3;
+    PASSWORD_RESET = 4;
+    ACCOUNT_ACTIVATION = 5;
+    REFUND_PROCESSED = 6;
+    NEW_PRODUCT_LAUNCH = 7;
+    DISCOUNT_OFFERS = 8;
+    SEASONAL_SALES = 9;
+    ABANDONED_CART_REMINDERS = 10;
+    LOYALTY_PROGRAM_UPDATES = 11;
+    ACCOUNT_ACTIVITY_ALERTS = 12;
+    SUBSCRIPTION_RENEWALS = 13;
+    SYSTEM_MAINTENANCE_ANNOUNCEMENTS = 14;
+    PRODUCT_BACK_IN_STOCK = 15;
+    NEWSLETTERS = 16;
+    FRIEND_REQUESTS = 17;
+    MESSAGES_OR_CHAT_ALERTS = 18;
+    SOCIAL_MEDIA_MENTIONS = 19;
+    COMMENT_REPLIES = 20;
+    LIKES_AND_REACTIONS = 21;
+    UNUSUAL_LOGIN_ATTEMPT = 22;
+    TWO_FACTOR_AUTHENTICATION_CODES = 23;
+    SECURITY_ALERTS = 24;
+    UPCOMING_EVENTS = 25;
+    EVENT_REMINDERS = 26;
+    EVENT_CANCELLATIONS_OR_RESCHEDULES = 27;
+    REVIEW_REQUESTS = 28;
+    CUSTOMER_SATISFACTION_SURVEYS = 29;
+    FEATURE_FEEDBACK_REQUESTS = 30;
+}
+
+// Enum for NotificationStatus
+enum NotificationStatus {
+    PENDING = 0;
+    SENT = 1;
+    FAILED = 2;
+}
+
+message Notification {
+    int32 id = 1;
+    int64 created_at = 2;
+    string username = 3;
+    int32 contact = 4;
+    string address = 5;
+    string email = 6;
+    NotificationType notification_type = 7;
+    Event event = 8;
+    string subject = 9;
+    string message = 10;
+    NotificationStatus notification_status = 11;
+    int64 sent_at = 12;
+}

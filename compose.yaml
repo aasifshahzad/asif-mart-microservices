@@ -1,0 +1,266 @@
+name: aasif_mart
+
+services:
+  payment:
+    build:
+      context: ./payment_service/
+      dockerfile: Dockerfile.dev
+
+    container_name: payment-service-container
+    volumes:
+      - ./payment_service:/code # Sync local development directory with the container
+    ports:
+      - "8001:8000" # Expose container port 8000 to host port 8001
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - payment_db
+      - broker
+
+  payment_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: payment-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=payment_db
+    ports:
+      - "5431:5432" # External : Internal
+    volumes:
+      - payment_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  inventory:
+    build:
+      context: ./inventory_service/
+      dockerfile: Dockerfile.dev
+    container_name: inventory-service-container
+    volumes:
+      - ./inventory_service:/code # Sync local development directory with the container
+    ports:
+      - "8002:8000" # Expose container port 8000 to host port 8002
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - inventory_db
+      - product
+      - broker
+
+  inventory_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: inventory-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=inventory_db
+    ports:
+      - "5432:5432" # External : Internal
+    volumes:
+      - inventory_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  notification:
+    build:
+      context: ./notification_service/
+      dockerfile: Dockerfile.dev
+    container_name: notification-service-container
+    volumes:
+      - ./notification_service:/code # Sync local development directory with the container
+    ports:
+      - "8003:8000" # Expose container port 8000 to host port 8003
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - notification_db
+      - broker
+
+  notification_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: notification-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=notification_db
+    ports:
+      - "5433:5432" # External : Internal
+    volumes:
+      - notification_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  order:
+    build:
+      context: ./order_service/
+      dockerfile: Dockerfile.dev
+    container_name: order-service-container
+    volumes:
+      - ./order_service:/code # Sync local development directory with the container
+    ports:
+      - "8004:8000" # Expose container port 8000 to host port 8004
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - order_db
+      - broker
+
+  order_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: order-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=order_db
+    ports:
+      - "5434:5432" # External : Internal
+    volumes:
+      - order_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  product:
+    build:
+      context: ./product_service
+      dockerfile: Dockerfile.dev
+    container_name: product-service-container
+    volumes:
+      - ./product_service:/code # Sync local development directory with the container
+    ports:
+      - "8005:8000" # Expose container port 8000 to host port 8005
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - product_db
+      - broker
+
+  product_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: product-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=product_db
+    ports:
+      - "5435:5432" # External : Internal
+    volumes:
+      - product_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  user:
+    build:
+      context: ./user_service/
+      dockerfile: Dockerfile.dev
+    container_name: user-service-container
+    volumes:
+      - ./user_service:/code # Sync local development directory with the container
+    ports:
+      - "8006:8000" # Expose container port 8000 to host port 8006
+    networks:
+      - aasif-mart-net
+    depends_on:
+      - user_db
+      - broker
+
+  user_db:
+    image: postgres:latest # Use the official PostgreSQL image
+    restart: always
+    container_name: user-database-container
+    environment:
+      - POSTGRES_USER=aasifshahzad
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=user_db
+    ports:
+      - "5436:5432" # External : Internal
+    volumes:
+      - user_db:/var/lib/postgresql/data
+    networks:
+      - aasif-mart-net
+
+  broker:
+    image: apache/kafka:3.7.0
+    hostname: broker
+    container_name: broker
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT_HOST://localhost:9092,PLAINTEXT://broker:19092"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:29093"
+      KAFKA_LISTENERS: "CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      CLUSTER_ID: "4L6g3nShT-eMCtK--X86sw"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_DIRS: "/tmp/kraft-combined-logs"
+    networks:
+      - aasif-mart-net
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "Local Kafka Cluster"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "broker:19092"
+      DYNAMIC_CONFIG_ENABLED: "true"
+    depends_on:
+      - broker
+    networks:
+      - aasif-mart-net
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:6.1.1
+    container_name: mart-schema-registry-container
+    depends_on:
+      - broker
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:19092
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    networks:
+      - aasif-mart-net
+
+volumes:
+  inventory_db:
+    name: inventory_db
+    driver: local
+
+  notification_db:
+    name: notification_db
+    driver: local
+
+  order_db:
+    name: order_db
+    driver: local
+
+  payment_db:
+    name: payment_db
+    driver: local
+
+  product_db:
+    name: product_db
+    driver: local
+
+  user_db:
+    name: user_db
+    driver: local
+
+networks:
+  aasif-mart-net: # Define the custom network
+    name: aasif_mart_network
+    driver: bridge
