@@ -2,8 +2,8 @@ import os
 
 directory = ["./inventory_service", "./notification_service",
              "./order_service", "./payment_service", "./product_service", "./user_service"]
-old_filename = ".env.example"  # Replace with the current filename
-new_filename = ".env"  # Replace with the new filename
+old_filename = ".env"  # Replace with the current filename
+new_filename = ".env.example"  # Replace with the new filename
 
 for d_name in directory:
     old_file_path = os.path.join(d_name, old_filename)

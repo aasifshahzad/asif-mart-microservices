@@ -42,8 +42,6 @@ This project develops an online mart API using an event-driven microservices arc
 ├── README.md
 ├── rename_env.py
 ├── structure.py
-├── .vscode/
-│ └── settings.json
 ├── inventory_service/
 │ ├── .env.example
 │ ├── .gitignore
@@ -56,8 +54,7 @@ This project develops an online mart API using an event-driven microservices arc
 │ ├── inventory/
 │ │ ├── db.py
 │ │ ├── main.py
-│ │ ├── setting.py
-│ │ └── **init**.py
+│ │ └── setting.py
 │ ├── producer/
 │ │ └── producer.py
 │ ├── router/
@@ -69,8 +66,8 @@ This project develops an online mart API using an event-driven microservices arc
 │ ├── model.py
 │ └── schema_registry.py
 │ └── tests/
-│ ├── test_inventory.py
-│ └── **init**.py
+│   └── test_inventory.py
+
 ├── notification_service/
 │ ├── .env.example
 │ ├── .gitignore
@@ -83,8 +80,7 @@ This project develops an online mart API using an event-driven microservices arc
 │ ├── notification/
 │ │ ├── db.py
 │ │ ├── main.py
-│ │ ├── setting.py
-│ │ └── **init**.py
+│ │ └── setting.py
 │ ├── producer/
 │ │ └── producer_functions.py
 │ ├── router/
@@ -96,8 +92,7 @@ This project develops an online mart API using an event-driven microservices arc
 │ ├── notification_pb2.py
 │ └── schema_registry.py
 │ └── tests/
-│ ├── test_notification.py
-│ └── **init**.py
+│ └── test_notification.py
 ├── order_service/
 │ ├── .env.example
 │ ├── .gitignore
@@ -279,51 +274,23 @@ This project develops an online mart API using an event-driven microservices arc
 
    To view all services on swagger UI click on undermentioned URL's:
 
-   - **Payment Service**
+   - [**Payment Service**](http://localhost:8001/docs#/)
 
-   ```bash
-   http://localhost:8001/docs#/
-   ```
+   - [**Inventory Service**](http://localhost:8002/docs#/)
 
-   - **Inventory Service**
+   - [**Notification Service**](http://localhost:8003/docs#/)
 
-   ```bash
-   http://localhost:8002/docs#/
-   ```
+   - [**Order Service**](http://localhost:8004/docs#/)
 
-   - **Notification Service**
+   - [**Product Service**](http://localhost:8005/docs#/)
 
-   ```bash
-   http://localhost:8003/docs#/
-   ```
+   - [**User Service**](http://localhost:8006/docs#/)
 
-   - **Order Service**
-
-   ```bash
-   http://localhost:8004/docs#/
-   ```
-
-   - **Product Service**
-
-   ```bash
-   http://localhost:8005/docs#/
-   ```
-
-   - **User Service**
-
-   ```bash
-   http://localhost:8006/docs#/
-   ```
-
-   - **Kafka UI**
-
-   ```bash
-   http://localhost:8080/
-   ```
+   - [**Kafka UI**](http://localhost:8080/)
 
 ### Unit Tests
 
-Use Pytest for unit tests:
+Use Pytest for unit tests by accesing the Docker Dev Container or by Docker Interactive mode:
 
 ```bash
 pytest
@@ -334,7 +301,7 @@ pytest
 - **Kafka**: Configured for event streaming between microservices.
 - **Protobuf**: Used for message serialization, ensuring efficient data exchange between services.
 
-## Kong API Gateway
+<!-- ## Kong API Gateway
 
 - **Kong**: Configured for API management, including routing, authentication, and rate limiting.
 
@@ -363,7 +330,7 @@ pytest
 ## CI/CD Pipeline
 
 - **Test Automation**: All unit and BDD tests are executed on each commit.
-- **Deployment**: Automated deployment to Azure Container Apps after successful tests.
+- **Deployment**: Automated deployment to Azure Container Apps after successful tests. -->
 
 ## License
 
